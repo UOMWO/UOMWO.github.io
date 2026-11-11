@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Your Name | Academic Page</title>
+
+  <script>
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    let preferredTheme;
+    try {
+      preferredTheme = localStorage.getItem("academic-theme");
+    } catch {}
+    function applyTheme() {
+      const dark = preferredTheme === "dark" ||
+        (preferredTheme !== "light" && systemTheme.matches);
+      document.documentElement.classList.toggle("dark", dark);
+    }
+    applyTheme();
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: "class" };
+  </script>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #fff;
+      --ink: #202733;
+      --muted: #616b78;
+      --rule: #dce1e7;
+      --link: #17569a;
+      --soft: #f4f6f8;
+      --header: 4.5rem;
+      color-scheme: light;
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--header) + 1.5rem);
+    }
+    :root.dark {
+      --bg: #121212;
+      --ink: #f2f3f5;
+      --muted: #adb5c0;
+      --rule: #353a41;
+      --link: #92c3ff;
+      --soft: #202328;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.7;
+    }
+    a { color: var(--link); }
+    a:hover { text-decoration: underline; text-underline-offset: .2em; }
+    :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+    .shell { width: min(100% - 3rem, 72rem); margin-inline: auto; }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--rule);
+    }
+    .header-inner {
+      height: var(--header);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+    }
+    nav { display: flex; align-items: center; gap: 1.5rem; }
+    nav a { white-space: nowrap; color: var(--ink); font-size: .9rem; }
+    .theme-button {
+      justify-self: end;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--rule);
+      border-radius: 50%;
+      background: var(--soft);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .theme-button .fa-sun, .dark .theme-button .fa-moon { display: none; }
+    .dark .theme-button .fa-sun { display: inline-block; }
+    .layout {
+      display: grid;
+      grid-template-columns: 30% minmax(0, 70%);
+      align-items: start;
+      padding-block: 3rem;
+    }
+    aside {
+      position: sticky;
+      top: calc(var(--header) + 2rem);
+      max-height: calc(100dvh - var(--header) - 3rem);
+      overflow-y: auto;
+      padding: .5rem 2rem 1rem 0;
+      text-align: center;
+    }
+    .avatar {
+      width: 9rem;
+      aspect-ratio: 1;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .muted { color: var(--muted); }
+    .social a {
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2.25rem;
+      color: var(--muted);
+      font-size: 1.18rem;
+    }
+    .social a:hover { color: var(--link); text-decoration: none; }
+    .map { width: min(100%, 13.5rem); margin: 1.75rem auto .5rem; border-radius: .25rem; }
+    main { min-width: 0; padding-left: 2rem; border-left: 1px solid var(--rule); }
+    main section + section { border-top: 1px solid var(--rule); padding-top: 2rem; }
+    main section { margin-bottom: 2rem; }
+    main h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -.025em;
+    }
+    .news li {
+      display: grid;
+      grid-template-columns: 4.5rem 1.5rem minmax(0, 1fr);
+      align-items: baseline;
+      gap: .5rem;
+      padding-block: .35rem;
+    }
+    time { color: var(--muted); font-size: .875rem; font-variant-numeric: tabular-nums; }
+    .publication {
+      display: grid;
+      grid-template-columns: minmax(8rem, 30%) 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    .cover { position: relative; overflow: hidden; border-radius: .375rem; }
+    .cover img { display: block; width: 100%; aspect-ratio: 8 / 5; object-fit: cover; }
+    .venue {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: .2rem .55rem;
+      color: white;
+      background: #183961;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    @media (max-width: 767px) {
+      :root { --header: 6.5rem; }
+      .shell { width: min(100% - 2rem, 40rem); }
+      .header-inner {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: 3.5rem 3rem;
+        gap: 0;
+      }
+      nav { grid-column: 1 / -1; grid-row: 2; overflow-x: auto; gap: 1.1rem; padding: .3rem .2rem; }
+      .theme-button { grid-column: 2; grid-row: 1; }
+      .layout { display: block; padding-block: 2rem; }
+      aside { position: static; max-height: none; padding: 0 0 2rem; }
+      main { border-left: 0; border-top: 1px solid var(--rule); padding: 2rem 0 0; }
+    }
+    @media (max-width: 420px) {
+      .publication { grid-template-columns: 6rem minmax(0, 1fr); gap: .75rem; }
+      .news li { grid-template-columns: 3.8rem 1.25rem minmax(0, 1fr); gap: .35rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="shell header-inner">
+      <span class="text-xl font-bold tracking-tight">Academic Page</span>
+      <nav aria-label="Main navigation">
+        <a href="#about">About me</a>
+        <a href="#news">News</a>
+        <a href="#publications">Publications</a>
+        <a href="#honors">Honors and Awards</a>
+      </nav>
+      <button id="theme-toggle" class="theme-button" type="button" aria-label="Dark mode">
+        <i class="fa-solid fa-moon" aria-hidden="true"></i>
+        <i class="fa-solid fa-sun" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="shell layout">
+    <aside aria-label="Academic profile">
+      <!-- 替换头像、姓名、邮箱和个人主页链接 -->
+      <img class="avatar" src="https://placehold.co/320x320/e8edf2/526478?text=Photo"
+           width="320" height="320" alt="Profile photo placeholder">
+      <h1 class="text-3xl font-bold tracking-tight">Your Name</h1>
+      <p class="muted mt-1">An Undergraduate @HUST</p>
+
+      <div class="social mt-3 flex justify-center gap-1">
+        <a href="mailto:you@example.com" aria-label="Email" title="Email"><i aria-hidden="true" class="fa-solid fa-envelope"></i></a>
+        <a href="https://scholar.google.com/citations?user=YOUR_ID" aria-label="Google Scholar" title="Google Scholar"><i aria-hidden="true" class="fa-solid fa-graduation-cap"></i></a>
+        <a href="https://github.com/YOUR_USERNAME" aria-label="GitHub" title="GitHub"><i aria-hidden="true" class="fa-brands fa-github"></i></a>
+        <a href="https://orcid.org/YOUR_ORCID" aria-label="ORCID" title="ORCID"><i aria-hidden="true" class="fa-brands fa-orcid"></i></a>
+        <a href="https://x.com/YOUR_USERNAME" aria-label="X (Twitter)" title="X (Twitter)"><i aria-hidden="true" class="fa-brands fa-x-twitter"></i></a>
+      </div>
+
+      <img class="map" src="https://placehold.co/480x220/f1f4f7/617386?text=World+Map"
+           width="480" height="220" alt="World map placeholder">
+      <a class="text-sm" href="index.html" download="index.html">Use this template ↗</a>
+    </aside>
+
+    <main>
+      <section id="about">
+        <h2 class="underline decoration-2 underline-offset-4">About me</h2>
+        <p class="leading-8">
+          🏫 I’m an undergraduate at
+          <a href="https://english.hust.edu.cn/">Huazhong University of Science and Technology</a>,
+          where I study computer science. 🧑‍💻 My research explores how storage systems
+          handle growing datasets and how vision models learn from limited examples.
+          I share my experiments on <a href="https://github.com/YOUR_USERNAME">GitHub</a>.
+          🎮 Outside the lab, I enjoy puzzle games and building small games with friends.
+        </p>
+      </section>
+
+      <!-- 以下新闻、论文及奖项为示例内容，请替换为真实信息 -->
+      <section id="news">
+        <h2>🔥 News</h2>
+        <ul class="news">
+          <li>
+            <time datetime="2026-12">2026.12</time><span aria-hidden="true">❄️</span>
+            <span>Submitted our work on few-shot recognition to <a href="https://cvpr.thecvf.com/">CVPR 2027</a>.</span>
+          </li>
+          <li>
+            <time datetime="2026-07">2026.07</time><span aria-hidden="true">📝</span>
+            <span>Presented our storage scheduling study at <a href="https://www.usenix.org/">ATC 2026</a>.</span>
+          </li>
+          <li>
+            <time datetime="2026-05">2026.05</time><span aria-hidden="true">🏆</span>
+            <span>Received an undergraduate research award for our file-system prototype.</span>
+          </li>
+        </ul>
+      </section>
+
+      <section id="publications">
+        <h2>📝 Publications</h2>
+        <!-- 将示例链接替换为对应的论文、DOI 和代码仓库地址 -->
+        <div class="space-y-7">
+          <article class="publication">
+            <div class="cover">
+              <img src="https://placehold.co/480x300/e3ebf3/526b84?text=Storage+Systems"
+                   width="480" height="300" alt="Storage systems paper cover placeholder">
+              <span class="venue">ATC 2026</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold leading-snug">Adaptive Request Scheduling for Shared Flash Storage</h3>
+              <p class="muted mt-2 text-sm"><strong>Your Name</strong>, Alex Chen, and Sam Lee</p>
+              <div class="mt-3 flex flex-wrap gap-x-3 text-sm">
+                <a href="https://example.com/storage/paper.pdf">[Paper]</a>
+                <a href="https://doi.org/YOUR_STORAGE_DOI">[DOI]</a>
+                <a href="https://github.com/YOUR_USERNAME/storage-scheduling">[Code]</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="publication">
+            <div class="cover">
+              <img src="https://placehold.co/480x300/e8eee9/536b5c?text=Visual+Recognition"
+                   width="480" height="300" alt="Visual recognition paper cover placeholder">
+              <span class="venue">PREPRINT</span>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold leading-snug">Learning Visual Prototypes from Sparse Annotations</h3>
+              <p class="muted mt-2 text-sm">Morgan Lin, <strong>Your Name</strong>, and Alex Chen</p>
+              <div class="mt-3 flex flex-wrap gap-x-3 text-sm">
+                <a href="https://example.com/vision/paper.pdf">[Paper]</a>
+                <a href="https://doi.org/YOUR_VISION_DOI">[DOI]</a>
+                <a href="https://github.com/YOUR_USERNAME/visual-prototypes">[Code]</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="honors">
+        <h2>🏆 Honors and Awards</h2>
+        <p class="flex items-baseline gap-4">
+          <time datetime="2026-05">2026.05</time>
+          <span>Undergraduate Research Award, HUST</span>
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const themeButton = document.getElementById("theme-toggle");
+
+    function updateThemeButton() {
+      const dark = document.documentElement.classList.contains("dark");
+      themeButton.setAttribute("aria-pressed", String(dark));
+      themeButton.title = dark ? "Switch to light mode" : "Switch to dark mode";
+    }
+
+    themeButton.addEventListener("click", () => {
+      preferredTheme = document.documentElement.classList.contains("dark") ? "light" : "dark";
+      applyTheme();
+      updateThemeButton();
+      try {
+        localStorage.setItem("academic-theme", preferredTheme);
+      } catch {}
+    });
+
+    systemTheme.addEventListener("change", () => {
+      applyTheme();
+      updateThemeButton();
+    });
+
+    updateThemeButton();
+  </script>
+</body>
+</html>
